@@ -106,7 +106,7 @@ func playPlaylist(inst *instance.Instance, playlist *service.SearchResult) {
 
 	for _ = range playlist.Videos {
 		// Discard channel items
-		<- ch
+		<-ch
 	}
 
 	size := len(inst.Tracks)

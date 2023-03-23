@@ -6,8 +6,10 @@ import (
 	"bangarang/musec/service"
 	"fmt"
 	"github.com/bwmarrin/discordgo"
+	"log"
 	"os"
 	"os/signal"
+	"runtime/debug"
 	"syscall"
 )
 
@@ -28,6 +30,10 @@ func main() {
 
 	discord, err := discordgo.New("Bot " + discordApiKey)
 
+	discordgo.Logger = func(msgL, caller int, format string, a ...interface{}) {
+		log.Println(format, a)
+	}
+
 	if err != nil {
 		fmt.Println("error creating Discord session ", err)
 		return
@@ -35,13 +41,14 @@ func main() {
 
 	discord.AddHandler(messageCreate)
 
-	discord.Identify.Intents = discordgo.IntentsGuilds | discordgo.IntentsGuildMessages | discordgo.IntentsGuildVoiceStates
+	discord.Identify.Intents = discordgo.MakeIntent(discordgo.IntentsGuilds | discordgo.IntentsGuildMessages | discordgo.IntentsGuildVoiceStates)
 
 	// Open a websocket connection to Discord and begin listening.
 	err = discord.Open()
 
 	if err != nil {
 		fmt.Println("error opening WebSocket connection to Discord ", err)
+		debug.PrintStack()
 		return
 	}
 

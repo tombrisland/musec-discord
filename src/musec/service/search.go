@@ -121,8 +121,6 @@ func SearchYouTube(terms string) (*SearchResult, error) {
 	return &result, nil
 }
 
-
-
 // VideosFromPlaylist returns all the videoIds associated with a playlist
 func VideosFromPlaylist(id string) (*SearchResult, error) {
 	// Find the playlist details
